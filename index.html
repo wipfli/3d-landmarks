@@ -7,14 +7,20 @@
     <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
 </head>
 
-<body style="margin:0"></body>
+<style>
+	body { margin: 0; padding: 0; }
+	#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
 
 <script type="text/javascript">
 
     const { MapboxLayer, ScenegraphLayer } = deck;
 
     const map = new maplibregl.Map({
-        container: document.body,
+        container: 'map',
         style: 'https://wipfli.github.io/swiss-map/style.json',
         center: [-122.264722, 37.796952],
         zoom: 17.5,
@@ -79,4 +85,5 @@
 
 </script>
 
+</body>
 </html>
