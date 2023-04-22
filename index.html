@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <title>3D Landmarks</title>
+    <script src="https://unpkg.com/deck.gl@^8.8.0/dist.min.js"></script>
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+</head>
+
+<body style="margin:0"></body>
+
+<script type="text/javascript">
+
+    const { MapboxLayer, ScenegraphLayer } = deck;
+
+    const map = new maplibregl.Map({
+        container: document.body,
+        style: 'https://wipfli.github.io/swiss-map/style.json',
+        center: [-122.264722, 37.796952],
+        zoom: 17.5,
+        pitch: 60,
+        rotation: -68.1,
+        hash: true
+    });
+
+    map.on('load', () => {
+        const firstLabelLayerId = map.getStyle().layers.find(layer => layer.type === 'symbol').id;
+
+        map.addLayer({
+            id: '3d-buildings',
+            source: 'swissmap',
+            'source-layer': 'building',
+            type: 'fill-extrusion',
+            minzoom: 14,
+            paint: {
+                'fill-extrusion-color': '#ccc',
+                'fill-extrusion-height': 30
+            }
+        });
+
+        map.addLayer(new MapboxLayer({
+            id: 'ScenegraphLayer',
+            type: ScenegraphLayer,
+            data: [{ "coordinates": [-122.2644548, 37.7969921] }],
+
+            /* props from ScenegraphLayer class */
+
+            // _animations: {
+            //     '*': { speed: 5 }
+            // },
+            _lighting: 'pbr',
+            // getAnimator: null,
+            // getColor: [255, 255, 255, 255],
+            getOrientation: d => [0, -90, 90],
+            getPosition: d => d.coordinates,
+            // getScale: [1, 1, 1],
+            // getScene: null,
+            // getTransformMatrix: [],
+            // getTranslation: [0, 0, 0],
+            // loaders: ,
+            scenegraph: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb',
+            // sizeMaxPixels: Number.MAX_SAFE_INTEGER,
+            // sizeMinPixels: 0,
+            sizeScale: 50,
+
+            /* props inherited from Layer class */
+
+            // autoHighlight: false,
+            // coordinateOrigin: [0, 0, 0],
+            // coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
+            // highlightColor: [0, 0, 128, 128],
+            // modelMatrix: null,
+            // opacity: 1,
+            pickable: true,
+            // visible: true,
+            // wrapLongitude: false,
+        }));
+    });
+
+</script>
+
+</html>
